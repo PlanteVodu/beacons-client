@@ -1,10 +1,11 @@
 <template>
   <div id="app">
-    <the-grid :gridItems="gridItems" />
+    <the-grid :gridItems="beacons" />
   </div>
 </template>
 
 <script>
+import axios from 'axios';
 import TheGrid from './components/TheGrid.vue';
 
 export default {
@@ -14,35 +15,24 @@ export default {
   },
   data() {
     return {
-      gridItems: [
-        {
-          id: 1,
-          title: 'Slide 1 Row 1',
-          row: 1,
-          column: 1,
-          columns: [
-            {
-              id: 1,
-              title: 'Column 1',
-              boxes: [
-                {
-                  id: 1,
-                  title: 'Box 1',
-                  bookmarks: [
-                    {
-                      id: 1,
-                      title: 'Style guide',
-                      url: 'https://vuejs.org/v2/style-guide/',
-                      icon: 'https://vuejs.org/images/icons/favicon-16x16.png',
-                    },
-                  ],
-                },
-              ],
-            },
-          ],
-        },
-      ],
+      beacons: [],
     };
+  },
+  methods: {
+    getBeacons() {
+      const path = 'http://localhost:5000/beacons';
+      axios.get(path)
+        .then((res) => {
+          console.log('res.data:', res.data);
+          this.beacons = res.data;
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    },
+  },
+  created() {
+    this.getBeacons();
   },
 };
 </script>
