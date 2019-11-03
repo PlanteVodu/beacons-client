@@ -38,7 +38,8 @@ import column from './Column.vue';
 const isChrome = navigator.userAgent.indexOf('Chrome') !== -1;
 
 // Adapt the minimal wheel delta as it changes drastically depending on the browser
-const MIN_WHEEL_DELTA = isChrome ? 10 : 1;
+const MIN_WHEEL_DELTA_X = isChrome ? 20 : 1;
+const MIN_WHEEL_DELTA_Y = isChrome ? 40 : 2;
 
 export default {
   name: 'GridItem',
@@ -52,7 +53,10 @@ export default {
   data() {
     return {
       moveRowEnsurer: null,
-      wheelThrottle: null,
+      wheelDelta: {
+        deltaX: 0,
+        deltaY: 0,
+      },
     };
   },
   computed: {
@@ -71,18 +75,49 @@ export default {
       //   this.item.columns.push(column);
       // });
     },
+    reinitializeWheelDelta() {
+      console.log('Reinitialize wheelDelta');
+      this.wheelDelta = {
+        deltaX: 0,
+        deltaY: 0,
+        n: 0,
+      };
+    },
     onWheel(event) {
-      if (this.wheelThrottle != null) return false;
-      // Prevent wheel events for the next 100 ms
-      this.wheelThrottle = setTimeout(() => { this.wheelThrottle = null; }, 100);
-
-      if (!this.$root.scrollActivated) {
+      if (!this.$root.scrollAllowed) {
         event.preventDefault(); // Prevent scrolling using touchpad
         return false;
       }
 
-      console.groupCollapsed('GridItem: onWheel()', this.$root.scrollActivated, event);
-      const allowScrolling = this.moveRowByY(event) || this.moveColumnByX(event);
+      // const wheelDeltaExists = this.wheelDelta != null;
+      let callback = null;
+
+      // Prevent wheel events for the next 100 ms
+      if (this.wheelDelta.deltaX === 0 && this.wheelDelta.deltaY === 0) {
+        callback = setTimeout(() => this.reinitializeWheelDelta(), 100);
+      }
+
+      this.wheelDelta.deltaX += event.deltaX;
+      this.wheelDelta.deltaY += event.deltaY;
+      this.wheelDelta.n += 1;
+
+      // if (wheelDeltaExists) return false;
+
+      console.log(this.wheelDelta.deltaX, this.wheelDelta.deltaY);
+
+      if (this.wheelDelta.n > 3 || (Math.abs(this.wheelDelta.deltaX) < MIN_WHEEL_DELTA_X
+          && Math.abs(this.wheelDelta.deltaY) < MIN_WHEEL_DELTA_Y)) {
+        clearTimeout(callback);
+        this.reinitializeWheelDelta();
+        return false;
+      }
+
+      console.groupCollapsed('GridItem: onWheel()', this.$root.scrollAllowed, event.deltaX, event.deltaY);
+      console.log(event);
+      const allowScrolling = this.moveRowByY(this.wheelDelta)
+                             || this.moveColumnByX(this.wheelDelta);
+      clearTimeout(callback);
+      this.reinitializeWheelDelta();
       console.groupEnd();
 
       if (!allowScrolling) {
@@ -104,10 +139,10 @@ export default {
       console.log('isTop:', isTop);
       console.log('isDown:', isDown);
 
-      if (isTop && event.deltaY < -MIN_WHEEL_DELTA) {
+      if (isTop && event.deltaY < -MIN_WHEEL_DELTA_Y) {
         this.ensureMoveRow('up');
       }
-      if (isDown && event.deltaY > MIN_WHEEL_DELTA) {
+      if (isDown && event.deltaY > MIN_WHEEL_DELTA_Y) {
         this.ensureMoveRow('down');
       }
 
@@ -137,10 +172,10 @@ export default {
       console.log('GridItem: moveColumnByX');
       console.log('event.deltaX:', event.deltaX);
 
-      if (event.deltaX < -MIN_WHEEL_DELTA) {
+      if (event.deltaX < -MIN_WHEEL_DELTA_X) {
         this.$emit('moveColumn', 'left');
       }
-      if (event.deltaX > MIN_WHEEL_DELTA) {
+      if (event.deltaX > MIN_WHEEL_DELTA_X) {
         this.$emit('moveColumn', 'right');
       }
 
