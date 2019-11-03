@@ -34,6 +34,9 @@ export default {
   created() {
     this.getBeacons();
   },
+  mounted() {
+    window.scrollTo(0, 0);
+  },
 };
 </script>
 
