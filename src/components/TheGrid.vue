@@ -27,9 +27,6 @@ export default {
 .grid-container {
   display: grid;
   height: 100%;
-  overflow: auto;
-  scrollbar-width: none;
-  scroll-behavior: smooth;
   color: #fff;
 }
 

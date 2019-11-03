@@ -74,4 +74,13 @@ export default {
   scrollbar-width: thin;
 }
 
+.column-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  align-items: top;
+  align-content: flex-start;
+}
+
 </style>

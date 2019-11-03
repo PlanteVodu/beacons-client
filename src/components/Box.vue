@@ -266,8 +266,7 @@ $borderRadius: 3px;
   background-color: #0000;
   border-bottom-left-radius: $borderRadius;
   border-bottom-right-radius: $borderRadius;
-  transition: height $transitionDuration,
-              background-color $transitionDuration,
+  transition: background-color $transitionDuration,
               height $transitionDuration .3s;
   cursor: pointer;
 
