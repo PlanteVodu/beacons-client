@@ -49,6 +49,23 @@ export default {
       this.currentRows = Array(this.gridItems[this.gridItems.length - 1].slidePosition).fill(1);
       console.log('this.currentRows:', this.currentRows);
     },
+    onWheel() {
+      console.log('grid-container wheel!');
+      // return false;
+      // console.log('event:', event);
+    },
+    moveColumnByY(event) {
+      console.log('TheGrid: moveColumnByY');
+      if (event.deltaY < 0) return this.moveColumn('left');
+      if (event.deltaY > 0) return this.moveColumn('right');
+      return true;
+    },
+    moveColumnByX(event) {
+      console.log('TheGrid: moveColumnByX');
+      if (event.deltaX < 0) return this.moveColumn('left');
+      if (event.deltaX > 0) return this.moveColumn('right');
+      return true;
+    },
     moveColumn(direction) {
       if (!this.$root.scrollAllowed) return false;
 
@@ -56,6 +73,7 @@ export default {
       console.log('this.$children[0].key:', this.$children[0].key);
       console.log('this:', this);
 
+      const currentRow = this.currentRows[this.currentColumn - 1];
       const destinationColumn = this.currentColumn + (direction === 'left' ? -1 : 1);
       const destinationRow = this.currentRows[destinationColumn - 1];
       const destinationId = this.getGridItemId(destinationColumn, destinationRow);
@@ -67,11 +85,20 @@ export default {
       if (destination != null) {
         this.$root.scrollAllowed = false;
 
+        if (currentRow !== destinationRow) {
+          console.log('Different rows. Switching & silent moving');
+          this.switchItemsRows(this.currentColumn, currentRow, destinationRow);
+          this.silentMoveRow(currentRow);
+        }
+
         console.log('Scrolling!');
         destination.scrollIntoView({ behavior: 'smooth' });
         this.currentColumn = destinationColumn;
 
         setTimeout(() => {
+          if (currentRow !== destinationRow) {
+            this.switchBackItemsRows(this.current);
+          }
           console.log('TheGrid: Reactivate wheel');
           this.$root.scrollAllowed = true;
         }, WHEEL_TIMEOUT_DURATION);

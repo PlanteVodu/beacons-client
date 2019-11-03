@@ -1,5 +1,7 @@
 <template>
   <div id="app">
+    <div class="scroll-border scroll-border-left"></div>
+    <div class="scroll-border scroll-border-right"></div>
     <the-grid :gridItems="beacons" />
   </div>
 </template>
@@ -70,6 +72,36 @@ body {
 
 a {
   text-decoration: none;
+}
+
+/******************
+ * SCROLL BORDERS *
+ ******************/
+
+.scroll-border {
+  position: absolute;
+  top: 0;
+  width: 50px;
+  height: 100%;
+  z-index: 5;
+  box-sizing: border-box;
+  cursor: e-resize;
+}
+
+.scroll-border-left {
+  left: 0;
+}
+
+.scroll-border-left:hover {
+  background-image: linear-gradient(to right, #d2f1fd1a, #0000);
+}
+
+.scroll-border-right {
+  right: 0;
+}
+
+.scroll-border-right:hover {
+  background-image: linear-gradient(to left, #d2f1fd1a, #0000);
 }
 
 </style>
