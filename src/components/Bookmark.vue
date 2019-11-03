@@ -21,8 +21,8 @@ export default {
 
 <style scoped lang="scss">
 
-$primaryColor: #222;
-$secondaryColor: #41b883;
+$primaryColor: #aaa;
+$secondaryColor: rgb(223, 166, 18);
 $transitionDuration: .7s;
 
 .bookmark {

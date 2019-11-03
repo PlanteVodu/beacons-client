@@ -173,15 +173,15 @@ export default {
 
 <style scoped lang="scss">
 
-$primaryColor: #222;
-$secondaryColor: #41b883;
+$primaryColor: #ccc;
+$secondaryColor: rgb(223, 166, 18);
 $transitionDuration: .7s;
 $borderRadius: 3px;
 
 /* GENERAL BOX */
 
 .box {
-  background-color: #bbb;
+  background-color: #363636;
   vertical-align: middle;
   margin-bottom: 54px;
   border-radius: $borderRadius;
@@ -225,34 +225,38 @@ $borderRadius: 3px;
   transition: color $transitionDuration ease;
   cursor: pointer;
   position: relative;
+
+  &:hover {
+    color: #fff !important;
+  }
 }
 
-:not(.box-reduced) > .box-header:before {
-  content: '';
-  position: absolute;
-  bottom: 0px;
-  left: 0;
-  right: 0;
-  height: 2px;
-  opacity: 0;
-  background-color: $secondaryColor;
-  transform-origin: bottom left;
-  transform: scaleX(1);
-  transition: opacity $transitionDuration;
-}
+// :not(.box-reduced) > .box-header:before {
+//   content: '';
+//   position: absolute;
+//   bottom: 0px;
+//   left: 0;
+//   right: 0;
+//   height: 2px;
+//   opacity: 0;
+//   background-color: $secondaryColor;
+//   transform-origin: bottom left;
+//   transform: scaleX(1);
+//   transition: opacity $transitionDuration;
+// }
 
-:not(.box-reduced) > .box-header:hover::before {
-  opacity: .8;
-}
+// :not(.box-reduced) > .box-header:hover::before {
+//   opacity: .8;
+// }
 
 .box-title {
   display: inline-block;
   cursor: text;
   transition: color $transitionDuration;
 
-  &:hover {
-    color: $secondaryColor;
-  }
+  // &:hover {
+  //   color: #fff;
+  // }
 }
 
 /* NEW BOOKMARK ICON */
@@ -260,7 +264,7 @@ $borderRadius: 3px;
 .new-bookmark-icon {
   height: 0;
   text-align: center;
-  color: #555;
+  color: #aaa;
   font-weight: bold;
   overflow: hidden;
   background-color: #0000;

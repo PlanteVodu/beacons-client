@@ -50,12 +50,15 @@ export default {
 
 <style scoped lang="scss">
 
+$primaryColor: #ccc;
+$secondaryColor: rgb(223, 166, 18);
+
 .column {
   width: 400px;
 }
 
 .column-header {
-  color: #ddd;
+  color: $secondaryColor;
   position: relative;
   text-align: center;
   margin-bottom: 15px;
