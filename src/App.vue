@@ -16,6 +16,8 @@ export default {
   data() {
     return {
       beacons: [],
+      nbColumns: 0,
+      nbRows: 0,
     };
   },
   methods: {
@@ -29,6 +31,9 @@ export default {
         .catch((error) => {
           console.error(error);
         });
+    },
+    getItemId(column, row) {
+      return `#slide-${column}-row-${row}`;
     },
   },
   created() {
