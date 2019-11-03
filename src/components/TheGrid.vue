@@ -108,6 +108,42 @@ export default {
 
       return false;
     },
+    silentMoveRow(row) {
+      console.log('silentMoveRow:', row);
+      const destinationId = this.getGridItemId(this.currentColumn, row);
+      const destination = document.getElementById(destinationId);
+      if (destination == null) return;
+      destination.scrollIntoView();
+    },
+    switchItemsRows(column, row1, row2) {
+      console.log('switchItemsRows:', column, row1, row2);
+      const item1 = this.getGridItemId(column, row1);
+      const item2 = this.getGridItemId(column, row2);
+
+      const el1 = document.getElementById(item1);
+      const el2 = document.getElementById(item2);
+
+      if (el1 != null) {
+        el1.style.gridArea = `${row2} / ${column} / auto / auto`;
+      }
+      if (el2 != null) {
+        el2.style.gridArea = `${row1} / ${column} / auto / auto`;
+      }
+    },
+    switchBackItemsRows(column, row1, row2) {
+      const item1 = this.getGridItemId(column, row1);
+      const item2 = this.getGridItemId(column, row2);
+
+      const el1 = document.getElementById(item1);
+      const el2 = document.getElementById(item2);
+
+      if (el1 != null) {
+        el1.style.gridArea = `${row1} / ${column} / auto / auto`;
+      }
+      if (el2 != null) {
+        el2.style.gridArea = `${row2} / ${column} / auto / auto`;
+      }
+    },
     moveRow(direction) {
       console.log('moveRow:', direction);
 
