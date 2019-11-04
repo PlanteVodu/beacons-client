@@ -50,8 +50,6 @@ export default {
       console.log('this.currentRows:', this.currentRows);
     },
     moveColumn(direction) {
-      if (!this.$root.scrollAllowed) return false;
-
       console.groupCollapsed('TheGrid: moveColumn:', direction);
       console.log('this.$children[0].key:', this.$children[0].key);
       console.log('this:', this);
