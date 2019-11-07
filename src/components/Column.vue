@@ -6,6 +6,12 @@
         :itemId="column.id"
         :itemType="'column'"
       ></editable-title>
+      <div
+        class="remove-column-button"
+        title="Remove this column"
+        @click="onRemoveColumn"
+      >&times;
+      </div>
     </div>
     <draggable
       :list="column.boxes"
@@ -27,6 +33,7 @@
 </template>
 
 <script>
+import axios from 'axios';
 import draggable from 'vuedraggable';
 import box from './Box.vue';
 import editableTitle from './EditableTitle.vue';
@@ -44,6 +51,24 @@ export default {
   methods: {
     onBoxDropped() {},
     addBox() {},
+    onRemoveColumn() {
+      // eslint-disable-next-line
+      if (window.confirm('Remove this column ?')) {
+        const column = {
+          objType: 'column',
+          objId: this.column.id,
+        };
+
+        axios.delete('http://localhost:5000/rmobj', { params: column })
+          .then(() => {
+            console.log('Success: Column has been removed from data base!');
+            this.$emit('removeColumn', this.column);
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      }
+    },
   },
 };
 </script>
@@ -52,9 +77,11 @@ export default {
 
 $primaryColor: #ccc;
 $secondaryColor: rgb(223, 166, 18);
+$transitionDuration: .7s;
 
 .column {
   width: 400px;
+  overflow: hidden;
 }
 
 .column-header {
@@ -64,5 +91,23 @@ $secondaryColor: rgb(223, 166, 18);
   margin-bottom: 15px;
   cursor: move;
 }
+
+.remove-column-button {
+  position: absolute;
+  top: 0;
+  right: 0;
+  font-size: 1.3rem;
+  color: hsla(0, 70%, 45%, 1);
+  text-shadow: 0px 0px 3px black;
+  font-weight: bold;
+  cursor: pointer;
+  margin-right: -20px;
+  transition: margin-right $transitionDuration;
+
+  .column-header:hover & {
+    margin-right: 10px;
+  }
+}
+
 
 </style>

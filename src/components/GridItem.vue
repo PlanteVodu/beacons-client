@@ -19,6 +19,7 @@
         :column="column"
         :position="index"
         :nbColumns="item.columns.length"
+        @removeColumn="removeColumn"
       ></column>
       <!-- <div
         class="add-column"
@@ -74,6 +75,12 @@ export default {
       //   const column = JSON.parse(data);
       //   this.item.columns.push(column);
       // });
+    },
+    removeColumn(columnToRemove) {
+      const index = this.item.columns.indexOf(columnToRemove);
+      if (index > -1) {
+        this.item.columns.splice(index, 1);
+      }
     },
     reinitializeWheelDelta() {
       console.log('Reinitialize wheelDelta');
