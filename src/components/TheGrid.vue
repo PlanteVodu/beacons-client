@@ -51,7 +51,7 @@ export default {
     },
     moveColumn(direction) {
       console.groupCollapsed('TheGrid: moveColumn:', direction);
-      console.log('this.$children[0].key:', this.$children[0].key);
+      console.log('this.gridItems.key:', this.gridItems.key);
       console.log('this:', this);
 
       const currentRow = this.currentRows[this.currentColumn - 1];
