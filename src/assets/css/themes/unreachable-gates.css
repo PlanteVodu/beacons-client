@@ -1,0 +1,49 @@
+.unreachable-gates.grid-item {
+	box-shadow: inset 0 0 2000px 200px #282a2dc0;
+	background-image: url('~@/assets/pictures/Skyhunter by Vulpes Ibculta.min.jpg');
+	background-repeat: no-repeat;
+	background-size: cover;
+}
+
+.unreachable-gates .banner {
+	box-sizing: border-box;
+	width: calc(100% - 14em);
+	margin: 0 auto 2em;
+	height: 15em;
+	background-image: url('~@/assets/pictures/The Unreachable Gates by katorius.min.jpg');
+	background-size: 100%, 130px;
+	background-position: center;
+	    background-position-y: center;
+	background-repeat: no-repeat;
+	background-position-y: -3.5em;
+	border: 1px solid #f2d58670;
+	margin-top: 2em;
+}
+
+.unreachable-gates .box {
+	background-color: #0006;
+}
+
+.unreachable-gates .box-header {
+	color: #eeee;
+}
+
+.unreachable-gates :not(.box-reduced) > .box-header:before {
+	background-color: #f2d586;
+}
+
+.unreachable-gates .box-title:hover {
+	color: #f2d586;
+}
+
+.unreachable-gates .bookmark {
+	color: #eeee;
+}
+
+.unreachable-gates .bookmark .title:before {
+	background-color: #f2d586;
+}
+
+.unreachable-gates .bookmark:hover {
+	color: #f2d586;
+}

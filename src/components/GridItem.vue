@@ -187,6 +187,12 @@ export default {
 
 <style scoped lang="scss">
 
+@import '~@/assets/css/themes/cuisine.css';
+@import '~@/assets/css/themes/dev.css';
+@import '~@/assets/css/themes/general.css';
+@import '~@/assets/css/themes/jardin.css';
+@import '~@/assets/css/themes/unreachable-gates.css';
+
 .grid-item {
   box-sizing: border-box;
   width: 100vw;

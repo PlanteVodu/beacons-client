@@ -1,0 +1,34 @@
+.jardin.grid-item {
+	box-shadow: inset 0 0 2000px 200px #282a2dc0;
+	background-image: url('~@/assets/pictures/Mushrooms by Sp4rti4te.min.jpg');
+	background-repeat: no-repeat;
+	background-size: cover;
+}
+
+.jardin .box {
+	background-color: #0f0f0b59;
+}
+
+.jardin .box-header {
+	color: #e9e0d8;
+}
+
+.jardin :not(.box-reduced) > .box-header:before {
+	background-color: #d0b49d;
+}
+
+.jardin .box-title:hover {
+	color: #a9c000;
+}
+
+.jardin .bookmark {
+	color: #e9e0d8;
+}
+
+.jardin .bookmark .title:before {
+	background-color: #a9c000;
+}
+
+.jardin .bookmark:hover {
+	color: #a9c000;
+}

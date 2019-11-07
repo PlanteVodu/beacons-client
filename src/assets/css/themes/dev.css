@@ -1,0 +1,79 @@
+/*********/
+/* DEV 1 */
+/*********/
+
+.dev1.grid-item {
+	box-shadow: inset 0 0 2000px 200px #1a090994;
+	background-image: url('~@/assets/pictures/Rethink by kuldarleement dakrwhn.min.jpg');
+	background-repeat: no-repeat;
+	background-size: cover;
+}
+
+.dev1 .box {
+	background-color: #3b353687;
+}
+
+.dev1 .box-header,
+.dev1 .bookmark {
+	color: #e0d2e4e0;
+}
+
+.dev1 .box-title:hover,
+.dev1 .bookmark:hover {
+	color: #f29eb7;
+}
+
+.dev1 :not(.box-reduced) > .box-header:before,
+.dev1 .bookmark .title:before {
+	background-color:  #f29eb7;
+}
+
+/*********/
+/* DEV 2 */
+/*********/
+
+.dev2.grid-item {
+	box-shadow: inset 0 0 2000px 200px #0008;
+	background-image: url('~@/assets/pictures/Meteora 3 by arsenixc.min.jpg');
+	background-repeat: no-repeat;
+	background-size: cover;
+}
+
+.dev2 .box {
+	background-color: #2820169e;
+}
+
+.dev2 .box-header,
+.dev2 .bookmark {
+	color: #e4d3d3;
+}
+
+.dev2 .box-title:hover,
+.dev2 .bookmark:hover {
+	color: #ebabd4;
+}
+
+.dev2 :not(.box-reduced) > .box-header:before,
+.dev2 .bookmark .title:before {
+	background-color: #ebabd4;
+}
+
+/*********/
+/* DEV 3 */
+/*********/
+
+
+.dev3.grid-item {
+	box-shadow: inset 0 0 1000px 200px #09173587;
+	background-image: url('~@/assets/pictures/Iron Sea by Kuldarleement.min.jpg');
+	background-repeat: no-repeat;
+	background-size: cover;
+}
+
+.dev3 .box {
+	background-color: #3339;
+}
+
+.dev3 :not(.box-reduced) > .box-header:before {
+	background-color: #d2f1fd;
+}

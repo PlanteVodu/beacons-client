@@ -1,0 +1,35 @@
+.general.grid-item {
+	box-shadow: inset 0 0 500px 200px #0003;
+	background-image: url('~@/assets/pictures/Dota2 - New Bloom.min.jpg');
+	background-repeat: no-repeat;
+	background-size: cover;
+}
+
+.general .box {
+	/*background-color: #25140dc5;*/
+	background-color: #30170ec4;
+}
+
+.general .box-header {
+	color: #eeed;
+}
+
+.general :not(.box-reduced) > .box-header:before {
+	background-color: #e7bb7e;
+}
+
+.general .box-title:hover {
+	color: #e7bb7e;
+}
+
+.general .bookmark {
+	color: #eeed;
+}
+
+.general .bookmark .title:before {
+	background-color: #e7bb7e;
+}
+
+.general .bookmark:hover {
+	color: #e7bb7e;
+}
