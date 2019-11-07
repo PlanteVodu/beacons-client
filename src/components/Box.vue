@@ -21,8 +21,17 @@
         :bookmark="bookmark"
       ></bookmark>
     </draggable>
-    <div v-if="newBookmarkInputDisplayed" class="new-bookmark-section">
+    <div class="new-bookmark-section">
+      <div
+        v-if="!newBookmarkInputDisplayed"
+        class="new-bookmark-icon"
+        title="Add a new bookmark"
+        @click="displayNewBookmark"
+      >
+        +
+      </div>
       <input
+        v-if="newBookmarkInputDisplayed"
         ref="newBookmarkInput"
         class="new-bookmark-input"
         name="title"
@@ -30,20 +39,13 @@
         @keyup.enter="submitNewBookmark"
       >
       <div
+        v-if="newBookmarkInputDisplayed"
         class="close"
         aria-hidden="true"
         @click="hideNewBookmark"
       >
         &times;
       </div>
-    </div>
-    <div
-      v-else
-      class="new-bookmark-icon"
-      title="Add a new bookmark"
-      @click="displayNewBookmark"
-    >
-      +
     </div>
   </div>
 </template>
@@ -185,7 +187,7 @@ $borderRadius: 3px;
   vertical-align: middle;
   margin-bottom: 54px;
   border-radius: $borderRadius;
-  transition: margin-bottom .5s .2s,
+  transition: margin-bottom $transitionDuration .2s,
               background-color $transitionDuration;
 
   &:not(.box-reduced):hover {
@@ -231,24 +233,6 @@ $borderRadius: 3px;
   }
 }
 
-// :not(.box-reduced) > .box-header:before {
-//   content: '';
-//   position: absolute;
-//   bottom: 0px;
-//   left: 0;
-//   right: 0;
-//   height: 2px;
-//   opacity: 0;
-//   background-color: $secondaryColor;
-//   transform-origin: bottom left;
-//   transform: scaleX(1);
-//   transition: opacity $transitionDuration;
-// }
-
-// :not(.box-reduced) > .box-header:hover::before {
-//   opacity: .8;
-// }
-
 .box-title {
   display: inline-block;
   cursor: text;
@@ -261,12 +245,39 @@ $borderRadius: 3px;
 
 /* NEW BOOKMARK ICON */
 
-.new-bookmark-icon {
+:not(.box-reduced).box:hover .new-bookmark-icon {
+  height: 27px;
+}
+
+/* NEW BOOKMARK SECTION */
+
+.new-bookmark-section {
+  display: flex;
+  width: 100%;
   height: 0;
+  align-items: center;
+  text-align: center;
+  color: #555;
+  font-weight: bold;
+  overflow: hidden;
+  // border-top: 1px solid #222;
+  border-bottom-right-radius: $borderRadius;
+  border-bottom-left-radius: $borderRadius;
+  transition: height $transitionDuration .2s,
+              background-color $transitionDuration;
+  // background-color: #fff4;
+}
+
+.box:hover .new-bookmark-section {
+  height: 27px;
+}
+
+.new-bookmark-icon {
   text-align: center;
   color: #aaa;
   font-weight: bold;
   overflow: hidden;
+  width: 100%;
   background-color: #0000;
   border-bottom-left-radius: $borderRadius;
   border-bottom-right-radius: $borderRadius;
@@ -280,28 +291,6 @@ $borderRadius: 3px;
   }
 }
 
-:not(.box-reduced).box:hover .new-bookmark-icon {
-  height: 27px;
-}
-
-/* NEW BOOKMARK SECTION */
-
-.new-bookmark-section {
-  display: flex;
-  width: 100%;
-  height: 27px;
-  align-items: center;
-  text-align: center;
-  color: #555;
-  font-weight: bold;
-  overflow: hidden;
-  border-top: 1px solid #222;
-  border-bottom-right-radius: $borderRadius;
-  border-bottom-left-radius: $borderRadius;
-  transition: height .5s .2s, background-color $transitionDuration;
-  background-color: #fff4;
-}
-
 .new-bookmark-input {
   flex: 10;
   height: 100%;
@@ -309,7 +298,6 @@ $borderRadius: 3px;
   padding-left: .7em;
   padding-right: .5em;
   color: #222;
-  background-color: transparent;
   border-right: 1px solid #222;
   transition: box-shadow .5s;
 
