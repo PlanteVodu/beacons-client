@@ -107,77 +107,24 @@ export default {
 
       if (this.wheelDelta.n > 3 || (Math.abs(this.wheelDelta.deltaX) < MIN_WHEEL_DELTA_X
           && Math.abs(this.wheelDelta.deltaY) < MIN_WHEEL_DELTA_Y)) {
+        console.log('Clear timeout & reinitialize');
         clearTimeout(callback);
         this.reinitializeWheelDelta();
         return false;
       }
 
-      console.groupCollapsed('GridItem: onWheel()', this.$root.scrollAllowed, event.deltaX, event.deltaY);
+      console.group('GridItem: onWheel()', this.$root.scrollAllowed, event.deltaX, event.deltaY);
       console.log(event);
-      const allowScrolling = this.moveRowByY(this.wheelDelta)
-                             || this.moveColumnByX(this.wheelDelta);
+
+      if (event.deltaX !== 0) {
+        this.$emit('moveColumnByX', event);
+      } else {
+        this.$emit('moveRowByY', event);
+      }
+
       clearTimeout(callback);
       this.reinitializeWheelDelta();
       console.groupEnd();
-
-      if (!allowScrolling) {
-        event.preventDefault(); // Prevent scrolling using touchpad
-        return false;
-      }
-
-      return true;
-    },
-    moveRowByY(event) {
-      if (event.deltaY === 0) return false;
-
-      const el = this.$el;
-      const isTop = el.scrollTop === 0;
-      const isDown = Math.abs((el.scrollHeight - el.scrollTop) - el.clientHeight) <= 1;
-
-      console.log('GridItem: moveRowByY');
-      console.log('event.deltaY:', event.deltaY);
-      console.log('isTop:', isTop);
-      console.log('isDown:', isDown);
-
-      if (isTop && event.deltaY < -MIN_WHEEL_DELTA_Y) {
-        this.ensureMoveRow('up');
-      }
-      if (isDown && event.deltaY > MIN_WHEEL_DELTA_Y) {
-        this.ensureMoveRow('down');
-      }
-
-      return true;
-    },
-    ensureMoveRow(direction) {
-      console.group('GridItem: ensureMoveRow', direction);
-      console.log('this.moveRowEnsurer:', this.moveRowEnsurer);
-      if (this.moveRowEnsurer != null) {
-        if (this.moveRowEnsurer.direction === direction) {
-          this.$emit('moveRow', direction);
-        }
-        this.moveRowEnsurer = null;
-      } else {
-        this.moveRowEnsurer = {
-          direction,
-          callback: setTimeout(() => {
-            this.moveRowEnsurer = null;
-          }, 200),
-        };
-      }
-      console.groupEnd();
-    },
-    moveColumnByX(event) {
-      if (event.deltaX === 0) return false;
-
-      console.log('GridItem: moveColumnByX');
-      console.log('event.deltaX:', event.deltaX);
-
-      if (event.deltaX < -MIN_WHEEL_DELTA_X) {
-        this.$emit('moveColumn', 'left');
-      }
-      if (event.deltaX > MIN_WHEEL_DELTA_X) {
-        this.$emit('moveColumn', 'right');
-      }
 
       return true;
     },

@@ -7,6 +7,8 @@
       ref="gridItems"
       @moveRow="moveRow($event)"
       @moveColumn="moveColumn($event)"
+      @moveColumnByX="moveColumnByX($event)"
+      @moveRowByY="moveRowByY($event)"
     ></grid-item>
   </div>
 </template>
@@ -49,8 +51,68 @@ export default {
       this.currentRows = Array(this.gridItems[this.gridItems.length - 1].slidePosition).fill(1);
       console.log('this.currentRows:', this.currentRows);
     },
+
+    moveRowByY(event) {
+      if (event.deltaY === 0) return false;
+
+      const el = event.explicitOriginalTarget;
+      const isTop = el.scrollTop === 0;
+      const isDown = Math.abs((el.scrollHeight - el.scrollTop) - el.clientHeight) <= 1;
+
+      console.log('GridItem: moveRowByY');
+      console.log('event.deltaY:', event.deltaY);
+      console.log('isTop:', isTop);
+      console.log('isDown:', isDown);
+
+      if (isTop && event.deltaY < 0) {
+        this.ensureMoveRow('up');
+      }
+      if (isDown && event.deltaY > 0) {
+        this.ensureMoveRow('down');
+      }
+
+      return true;
+    },
+    ensureMoveRow(direction) {
+      console.group('GridItem: ensureMoveRow', direction);
+      console.log('this.moveRowEnsurer:', this.moveRowEnsurer);
+      if (this.moveRowEnsurer != null) {
+        if (this.moveRowEnsurer.direction === direction) {
+          this.moveRow(direction);
+        }
+        this.moveRowEnsurer = null;
+      } else {
+        this.moveRowEnsurer = {
+          direction,
+          callback: setTimeout(() => {
+            this.moveRowEnsurer = null;
+          }, 200),
+        };
+      }
+      console.groupEnd();
+    },
+    moveColumnByX(event) {
+      console.group('TheGrid: moveColumnByX()', event);
+      if (event.deltaX === 0) return false;
+
+      // console.log('GridItem: moveColumnByX');
+      console.log('event.deltaX:', event.deltaX);
+
+      if (event.deltaX < 0) {
+        this.moveColumn('left');
+      }
+      if (event.deltaX > 0) {
+        this.moveColumn('right');
+      }
+
+      console.groupEnd();
+
+      return true;
+    },
+
     moveColumn(direction) {
       console.groupCollapsed('TheGrid: moveColumn:', direction);
+      console.log('this.GridItems:', this.GridItems);
       console.log('this.gridItems.key:', this.gridItems.key);
       console.log('this:', this);
 
@@ -144,18 +206,18 @@ export default {
       }
     },
 
-    moveColumnByY(event) {
-      console.log('TheGrid: moveColumnByY');
-      if (event.deltaY < 0) return this.moveColumn('left');
-      if (event.deltaY > 0) return this.moveColumn('right');
-      return true;
-    },
-    moveColumnByX(event) {
-      console.log('TheGrid: moveColumnByX');
-      if (event.deltaX < 0) return this.moveColumn('left');
-      if (event.deltaX > 0) return this.moveColumn('right');
-      return true;
-    },
+    // moveColumnByY(event) {
+    //   console.log('TheGrid: moveColumnByY');
+    //   if (event.deltaY < 0) return this.moveColumn('left');
+    //   if (event.deltaY > 0) return this.moveColumn('right');
+    //   return true;
+    // },
+    // moveColumnByX(event) {
+    //   console.log('TheGrid: moveColumnByX');
+    //   if (event.deltaX < 0) return this.moveColumn('left');
+    //   if (event.deltaX > 0) return this.moveColumn('right');
+    //   return true;
+    // },
   },
 };
 </script>
