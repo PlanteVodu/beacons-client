@@ -5,6 +5,7 @@
         v-model="column.title"
         :itemId="column.id"
         :itemType="'column'"
+        @removeBox="removeBox"
       ></editable-title>
       <div
         class="remove-column-button"
@@ -28,7 +29,7 @@
       class="add-box"
       @click="addBox"
       title="Add a new box"
-    >+</div> -->
+    >+</div>-->
   </div>
 </template>
 
@@ -59,7 +60,8 @@ export default {
           objId: this.column.id,
         };
 
-        axios.delete('http://localhost:5000/rmobj', { params: column })
+        axios
+          .delete('http://localhost:5000/rmobj', { params: column })
           .then(() => {
             console.log('Success: Column has been removed from data base!');
             this.$emit('removeColumn', this.column);
@@ -67,6 +69,12 @@ export default {
           .catch((error) => {
             console.error(error);
           });
+      }
+    },
+    removeBox(boxToRemove) {
+      const index = this.item.boxes.indexOf(boxToRemove);
+      if (index > -1) {
+        this.item.boxes.splice(index, 1);
       }
     },
   },
@@ -77,7 +85,7 @@ export default {
 
 $primaryColor: #ccc;
 $secondaryColor: rgb(223, 166, 18);
-$transitionDuration: .7s;
+$transitionDuration: 0.7s;
 
 .column {
   width: 400px;
@@ -90,6 +98,10 @@ $transitionDuration: .7s;
   text-align: center;
   margin-bottom: 15px;
   cursor: move;
+}
+
+.column-title {
+  cursor: pointer;
 }
 
 .remove-column-button {
@@ -108,6 +120,5 @@ $transitionDuration: .7s;
     margin-right: 10px;
   }
 }
-
 
 </style>

@@ -6,6 +6,11 @@
         :itemId="box.id"
         :itemType="'box'"
       ></editable-title>
+      <div
+        class="remove-box-button"
+        title="Remove this box"
+        @click="onRemoveBox"
+      >&times;</div>
     </div>
       <!-- :style="{maxHeight: bookmarksMaxHeight}" -->
     <draggable
@@ -51,6 +56,7 @@
 </template>
 
 <script>
+import axios from 'axios';
 import draggable from 'vuedraggable';
 import bookmark from './Bookmark.vue';
 import editableTitle from './EditableTitle.vue';
@@ -100,6 +106,25 @@ export default {
       if (event.detail > 1) return;
       this.boxReduced = !this.boxReduced;
       this.$el.classList.toggle('box-reduced');
+    },
+    onRemoveBox() {
+      // eslint-disable-next-line
+      if (window.confirm('Remove this box ?')) {
+        const box = {
+          objType: 'box',
+          objId: this.box.id,
+        };
+
+        axios
+          .delete('http://localhost:5000/rmobj', { params: box })
+          .then(() => {
+            console.log('Success: Box has been removed from data base!');
+            this.$emit('removeBox', this.box);
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      }
     },
     displayNewBookmark() {
       this.newBookmarkInputDisplayed = true;
@@ -241,6 +266,23 @@ $borderRadius: 3px;
   // &:hover {
   //   color: #fff;
   // }
+}
+
+.remove-box-button {
+  position: absolute;
+  top: 0;
+  right: 0;
+  font-size: 1.3rem;
+  color: hsla(0, 70%, 45%, 1);
+  text-shadow: 0px 0px 3px black;
+  font-weight: bold;
+  cursor: pointer;
+  margin-right: -20px;
+  transition: margin-right $transitionDuration;
+
+  .box-header:hover & {
+    margin-right: 10px;
+  }
 }
 
 /* NEW BOOKMARK ICON */
