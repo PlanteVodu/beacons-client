@@ -1,5 +1,15 @@
 <template>
   <div id="content" class="grid-container">
+    <div
+      class="scroll-border scroll-border-left"
+      @wheel="onBorderWheel"
+      @click="moveColumn('left')"
+    ></div>
+    <div
+      class="scroll-border scroll-border-right"
+      @wheel="onBorderWheel"
+      @click="moveColumn('right')"
+    ></div>
     <grid-item
       v-for="gridItem in gridItems"
       :key="'grid-item-' + gridItem.id"
@@ -206,18 +216,21 @@ export default {
       }
     },
 
-    // moveColumnByY(event) {
-    //   console.log('TheGrid: moveColumnByY');
-    //   if (event.deltaY < 0) return this.moveColumn('left');
-    //   if (event.deltaY > 0) return this.moveColumn('right');
-    //   return true;
-    // },
-    // moveColumnByX(event) {
-    //   console.log('TheGrid: moveColumnByX');
-    //   if (event.deltaX < 0) return this.moveColumn('left');
-    //   if (event.deltaX > 0) return this.moveColumn('right');
-    //   return true;
-    // },
+    onBorderWheel(event) {
+      if (!this.$root.scrollAllowed) {
+        event.preventDefault(); // Prevent scrolling using touchpad
+        return false;
+      }
+      if (!this.moveColumnByY(event) || !this.moveColumnByX(event)) return false;
+
+      return true;
+    },
+    moveColumnByY(event) {
+      console.log('TheGrid: moveColumnByY');
+      if (event.deltaY < 0) return this.moveColumn('left');
+      if (event.deltaY > 0) return this.moveColumn('right');
+      return true;
+    },
   },
 };
 </script>
