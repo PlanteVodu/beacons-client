@@ -5,6 +5,10 @@
 	background-size: cover;
 }
 
+.general .column-header {
+	color: rgb(223, 166, 18);
+}
+
 .general .box {
 	/*background-color: #25140dc5;*/
 	background-color: #30170ec4;
