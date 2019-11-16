@@ -151,6 +151,7 @@ export default {
   box-sizing: border-box;
   width: 100vw;
   height: 100vh;
+  padding: 2rem 8rem;
   overflow-x: hidden;
   overflow-y: auto;
   scrollbar-color: #fffb #fff3;
@@ -161,9 +162,10 @@ export default {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  justify-content: space-evenly;
+  justify-content: flex-start;
   align-items: top;
   align-content: flex-start;
+  gap: 5rem;
 }
 
 </style>

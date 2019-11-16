@@ -84,11 +84,11 @@ export default {
 <style scoped lang="scss">
 
 $primaryColor: #ccc;
-$secondaryColor: rgb(223, 166, 18);
+$secondaryColor: #ddd;
 $transitionDuration: 0.7s;
 
 .column {
-  width: 400px;
+  width: 27rem;
   overflow: hidden;
 }
 
