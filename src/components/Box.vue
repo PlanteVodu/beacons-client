@@ -7,7 +7,7 @@
         :itemType="'box'"
       ></editable-title>
       <div
-        class="remove-box-button"
+        class="remove-button"
         title="Remove this box"
         @click="onRemoveBox"
       >&times;</div>
@@ -266,23 +266,6 @@ $borderRadius: 3px;
   // &:hover {
   //   color: #fff;
   // }
-}
-
-.remove-box-button {
-  position: absolute;
-  top: 0;
-  right: 0;
-  font-size: 1.3rem;
-  color: hsla(0, 70%, 45%, 1);
-  text-shadow: 0px 0px 3px black;
-  font-weight: bold;
-  cursor: pointer;
-  margin-right: -20px;
-  transition: margin-right $transitionDuration;
-
-  .box-header:hover & {
-    margin-right: 10px;
-  }
 }
 
 /* NEW BOOKMARK ICON */

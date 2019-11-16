@@ -8,7 +8,7 @@
         @removeBox="removeBox"
       ></editable-title>
       <div
-        class="remove-column-button"
+        class="remove-button"
         title="Remove this column"
         @click="onRemoveColumn"
       >&times;
@@ -104,7 +104,13 @@ $transitionDuration: 0.7s;
   cursor: pointer;
 }
 
-.remove-column-button {
+</style>
+
+<style lang="scss">
+
+$transitionDuration: 0.7s;
+
+.remove-button {
   position: absolute;
   top: 0;
   right: 0;
@@ -114,10 +120,15 @@ $transitionDuration: 0.7s;
   font-weight: bold;
   cursor: pointer;
   margin-right: -20px;
-  transition: margin-right $transitionDuration;
+  transition: margin-right $transitionDuration, color $transitionDuration;
 
-  .column-header:hover & {
+  .column-header:hover &,
+  .box-header:hover & {
     margin-right: 10px;
+  }
+
+  &:hover {
+    color:hsla(0, 100%, 55%, 1);
   }
 }
 
