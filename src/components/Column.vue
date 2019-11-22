@@ -25,11 +25,11 @@
         :box="box"
       ></box>
     </draggable>
-    <!-- <div
+    <div
       class="add-box"
-      @click="addBox"
+      @click="addBox(column.id)"
       title="Add a new box"
-    >+</div>-->
+    >+</div>
   </div>
 </template>
 
@@ -51,7 +51,18 @@ export default {
   },
   methods: {
     onBoxDropped() {},
-    addBox() {},
+    addBox(columnId) {
+      const path = 'http://localhost:5001/boxes';
+      console.log('columnId:', columnId);
+      const params = {
+        parent_id: columnId,
+        position: this.column.content.length,
+      };
+
+      axios.post(path, params)
+        .then((res) => { console.log(res.data); this.column.content.push(res.data); })
+        .catch(error => console.error(error));
+    },
     onRemoveColumn() {
       // eslint-disable-next-line
       if (window.confirm('Remove this column ?')) {
@@ -102,6 +113,28 @@ $transitionDuration: 0.7s;
 
 .column-title {
   cursor: pointer;
+}
+
+.add-box {
+  opacity: 0;
+  background-color: #45454580;
+  text-align: center;
+  font-weight: bold;
+  line-height: 70px;
+  color: #ccc;
+  width: 100%;
+  height: 75px;
+  border-radius: 6px;
+  transition: opacity .7s, background-color .7s;
+}
+
+.column-container:hover .add-box {
+  opacity: 1;
+}
+
+.add-box:hover {
+  cursor: pointer;
+  background-color: #ffccfe36;
 }
 
 </style>
