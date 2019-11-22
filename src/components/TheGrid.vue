@@ -135,7 +135,8 @@ export default {
     moveRowByY(event) {
       if (event.deltaY === 0) return false;
 
-      const el = event.explicitOriginalTarget;
+      const el = document.getElementById(this.getCurrentGridItemId());
+
       const isTop = el.scrollTop === 0;
       const isDown = Math.abs((el.scrollHeight - el.scrollTop) - el.clientHeight) <= 1;
 
