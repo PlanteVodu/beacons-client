@@ -110,20 +110,13 @@ export default {
     onRemoveBox() {
       // eslint-disable-next-line
       if (window.confirm('Remove this box ?')) {
-        const box = {
-          objType: 'box',
-          objId: this.box.id,
-        };
-
         axios
-          .delete('http://localhost:5001/rmobj', { params: box })
+          .delete(`http://localhost:5001/boxes/${this.box.id}`)
           .then(() => {
             console.log('Success: Box has been removed from data base!');
             this.$emit('removeBox', this.box);
           })
-          .catch((error) => {
-            console.error(error);
-          });
+          .catch(error => console.error(error));
       }
     },
     displayNewBookmark() {
