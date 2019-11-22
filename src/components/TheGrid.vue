@@ -26,7 +26,7 @@
 <script>
 import GridItem from './GridItem.vue';
 
-const WHEEL_TIMEOUT_DURATION = 600;
+const WHEEL_TIMEOUT_DURATION = 800;
 
 export default {
   name: 'TheGrid',
@@ -56,10 +56,80 @@ export default {
     getGridItemId(column, row) {
       return `slide-${column}-row-${row}`;
     },
+    getCurrentGridItemId() {
+      const currentRow = this.currentRows[this.currentColumn - 1];
+      return this.getGridItemId(this.currentColumn, currentRow);
+    },
     initializeCurrentRows() {
       console.log('Initializing currentRows');
       this.currentRows = Array(this.gridItems[this.gridItems.length - 1].slidePosition).fill(1);
       console.log('this.currentRows:', this.currentRows);
+    },
+
+    scrollTo(element, onDone) {
+      console.log('scrollTo:', element);
+
+      // if (this.cancelScroll != null) {
+      //   console.log('cancelScroll!');
+      //   this.cancelScroll();
+      //   this.cancelScroll = null;
+      //   const destinationId = this.getGridItemId(this.currentColumn,
+      //     this.currentRows[this.currentColumn - 1]);
+      //   const destination = document.getElementById(destinationId);
+      //   destination.scrollIntoView();
+
+      // }
+
+      const duration = WHEEL_TIMEOUT_DURATION;
+
+      const options = {
+        // container: '#content',
+        easing: 'ease-in-out',
+        force: true,
+        // cancelable: false,
+        onStart: () => {
+          // scrolling started
+          console.log('start scrolling');
+        },
+        onDone: () => {
+          // scrolling is done
+          console.log('scrolling done');
+          this.cancelScroll = null;
+          onDone();
+        },
+        onCancel: (ev) => {
+          console.log('onCancel!');
+          console.log('ev:', ev);
+          // console.log('el:', el);
+          if (ev.type === 'DOMMouseScroll' || ev.type === 'wheel') {
+            return false;
+          }
+          // Si on est déjà au bout (horizontal ou vertical, ne pas annuler)
+          console.log('scrolling cancelled');
+          this.scrollAllowed = true;
+          // const destinationId = this.getGridItemId(this.currentColumn,
+          //   this.currentRows[this.currentColumn - 1]);
+          // const destination = document.getElementById(destinationId);
+          // destination.scrollIntoView();
+          this.cancelScroll = null;
+          return true;
+          // const destination = document.getElementById(element);
+          // destination.scrollIntoView();
+          // this.$scrollTo(element, duration, options);
+          // scrolling has been interrupted
+        },
+        x: true,
+        y: true,
+      };
+
+      // this.cancelScroll = VueScrollTo.scrollTo(element, duration, options);
+
+      // or alternatively inside your components you can use
+      // this.cancelScroll =
+      this.cancelScroll = this.$scrollTo(`#${element}`, duration, options);
+
+      // to cancel scrolling you can call the returned function
+      // cancelScroll();
     },
 
     moveRowByY(event) {
@@ -121,7 +191,7 @@ export default {
     },
 
     moveColumn(direction) {
-      console.groupCollapsed('TheGrid: moveColumn:', direction);
+      console.group('TheGrid: moveColumn:', direction);
       console.log('this.GridItems:', this.GridItems);
       console.log('this.gridItems.key:', this.gridItems.key);
       console.log('this:', this);
@@ -145,16 +215,15 @@ export default {
         }
 
         console.log('Scrolling!');
-        destination.scrollIntoView({ behavior: 'smooth' });
-        this.currentColumn = destinationColumn;
-
-        setTimeout(() => {
+        const onDone = () => {
           if (currentRow !== destinationRow) {
             this.switchBackItemsRows(this.current);
           }
           console.log('TheGrid: Reactivate wheel');
           this.$root.scrollAllowed = true;
-        }, WHEEL_TIMEOUT_DURATION);
+        };
+        this.currentColumn = destinationColumn;
+        this.scrollTo(destinationId, onDone);
       }
 
       console.groupEnd();
@@ -171,12 +240,12 @@ export default {
 
       if (destination != null) {
         this.$root.scrollAllowed = false;
-        destination.scrollIntoView({ behavior: 'smooth' });
-        this.currentRows[this.currentColumn - 1] = destinationRow;
-        setTimeout(() => {
+        const onDone = () => {
           console.log('TheGrid: Reactivate wheel');
           this.$root.scrollAllowed = true;
-        }, WHEEL_TIMEOUT_DURATION);
+        };
+        this.currentRows[this.currentColumn - 1] = destinationRow;
+        this.scrollTo(destinationId, onDone);
       }
     },
     silentMoveRow(row) {
