@@ -33,6 +33,7 @@
 </template>
 
 <script>
+import axios from 'axios';
 import draggable from 'vuedraggable';
 import column from './Column.vue';
 
@@ -68,14 +69,15 @@ export default {
   },
   methods: {
     addColumn() {
-      // let parameters = {
-      // rowId: this.item.id
-      // };
+      const path = 'http://localhost:5001/columns';
+      const params = {
+        parent_id: this.item.slideId,
+        position: this.item.content.length,
+      };
 
-      // $.get('addcolumn', parameters, (data, status) => {
-      //   const column = JSON.parse(data);
-      //   this.item.content.push(column);
-      // });
+      axios.post(path, params)
+        .then((res) => { this.item.content.push(res.data); })
+        .catch(error => console.error(error));
     },
     removeColumn(columnToRemove) {
       const index = this.item.content.indexOf(columnToRemove);
@@ -198,6 +200,28 @@ export default {
   align-items: top;
   align-content: flex-start;
   gap: 5rem;
+}
+
+.add-column {
+  opacity: 0;
+  background-color: #45454580;
+  text-align: center;
+  font-weight: bold;
+  line-height: 70px;
+  color: #ccc;
+  width: 400px;
+  height: 75px;
+  border-radius: 6px;
+  transition: opacity .7s, background-color .7s;
+}
+
+.column-container:hover .add-column {
+  opacity: 1;
+}
+
+.add-column:hover {
+  cursor: pointer;
+  background-color: #ffccfe36;
 }
 
 </style>

@@ -6,6 +6,7 @@
         :itemId="column.id"
         :itemType="'column'"
         @removeBox="removeBox"
+        @rename="onRename"
       ></editable-title>
       <div
         class="remove-button"
