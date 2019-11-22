@@ -96,7 +96,7 @@ $transitionDuration: 0.7s;
   color: $secondaryColor;
   position: relative;
   text-align: center;
-  margin-bottom: 15px;
+  margin-bottom: 1.8rem;
   cursor: move;
 }
 

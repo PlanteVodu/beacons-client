@@ -43,6 +43,7 @@ $transitionDuration: .7s;
   .title {
     position: relative;
     line-height: 1em;
+    text-align: left;
   }
 
   .title:before {
