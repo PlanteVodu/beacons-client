@@ -66,9 +66,6 @@ export default {
       console.log('this.currentRows:', this.currentRows);
     },
 
-    scrollTo(element, onDone) {
-      console.log('scrollTo:', element);
-
     scrollTo(destinationId, onDone) {
       console.log('scrollTo:', destinationId);
       console.log('this.cancelScroll:', this.cancelScroll);
@@ -101,8 +98,8 @@ export default {
           onDone();
         },
         onCancel: (ev) => {
-          console.log('onCancel!');
-          console.log('ev:', ev);
+          // console.log('onCancel!');
+          // console.log('ev:', ev);
           // console.log('el:', el);
           if (ev.type === 'DOMMouseScroll' || ev.type === 'wheel') return false;
           if (ev.type === 'mousedown') {
@@ -132,46 +129,6 @@ export default {
       // cancelScroll();
     },
 
-    moveRowByY(event) {
-      if (event.deltaY === 0) return false;
-
-      const el = document.getElementById(this.getCurrentGridItemId());
-
-      const isTop = el.scrollTop === 0;
-      const isDown = Math.abs((el.scrollHeight - el.scrollTop) - el.clientHeight) <= 1;
-
-      console.log('GridItem: moveRowByY');
-      console.log('event.deltaY:', event.deltaY);
-      console.log('isTop:', isTop);
-      console.log('isDown:', isDown);
-
-      if (isTop && event.deltaY < 0) {
-        this.ensureMoveRow('up');
-      }
-      if (isDown && event.deltaY > 0) {
-        this.ensureMoveRow('down');
-      }
-
-      return true;
-    },
-    ensureMoveRow(direction) {
-      console.group('GridItem: ensureMoveRow', direction);
-      console.log('this.moveRowEnsurer:', this.moveRowEnsurer);
-      if (this.moveRowEnsurer != null) {
-        if (this.moveRowEnsurer.direction === direction) {
-          this.moveRow(direction);
-        }
-        this.moveRowEnsurer = null;
-      } else {
-        this.moveRowEnsurer = {
-          direction,
-          callback: setTimeout(() => {
-            this.moveRowEnsurer = null;
-          }, 200),
-        };
-      }
-      console.groupEnd();
-    },
     moveColumnByX(event) {
       console.group('TheGrid: moveColumnByX()', event);
       if (event.deltaX === 0) return false;

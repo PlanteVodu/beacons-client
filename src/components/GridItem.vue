@@ -4,6 +4,7 @@
     :id="'slide-' + item.slidePosition + '-row-' + item.position"
     :style="itemStyle"
     :row-id="item.id"
+    ref="gridItem"
     @wheel="onWheel"
   >
     <div class="banner"></div>
@@ -35,13 +36,6 @@
 import draggable from 'vuedraggable';
 import column from './Column.vue';
 
-// Detect Chrome : https://stackoverflow.com/a/9851769
-const isChrome = navigator.userAgent.indexOf('Chrome') !== -1;
-
-// Adapt the minimal wheel delta as it changes drastically depending on the browser
-const MIN_WHEEL_DELTA_X = isChrome ? 20 : 1;
-const MIN_WHEEL_DELTA_Y = isChrome ? 40 : 2;
-
 export default {
   name: 'GridItem',
   components: {
@@ -64,6 +58,13 @@ export default {
     itemStyle() {
       return `grid-row: ${this.item.position}; grid-column: ${this.item.slidePosition}`;
     },
+  },
+  mounted() {
+    const el = this.$refs.gridItem;
+    this.isTop = el.scrollTop === 0;
+    this.isBottom = Math.abs((el.scrollHeight - el.scrollTop) - el.clientHeight) <= 1;
+    this.preventDuration = {};
+    this.preventMoveCallback = {};
   },
   methods: {
     addColumn() {
@@ -96,42 +97,72 @@ export default {
         return false;
       }
 
-      // const wheelDeltaExists = this.wheelDelta != null;
-      let callback = null;
-
-      // Prevent wheel events for the next 100 ms
-      if (this.wheelDelta.deltaX === 0 && this.wheelDelta.deltaY === 0) {
-        callback = setTimeout(() => this.reinitializeWheelDelta(), 100);
+      let direction;
+      if (event.deltaX !== 0) {
+        direction = (event.deltaX > 0) ? 'right' : 'left';
+      } else {
+        direction = (event.deltaY > 0) ? 'down' : 'up';
       }
 
-      this.wheelDelta.deltaX += event.deltaX;
-      this.wheelDelta.deltaY += event.deltaY;
-      this.wheelDelta.n += 1;
-
-      // if (wheelDeltaExists) return false;
-
-      console.log(this.wheelDelta.deltaX, this.wheelDelta.deltaY);
-
-      if (this.wheelDelta.n > 3 || (Math.abs(this.wheelDelta.deltaX) < MIN_WHEEL_DELTA_X
-          && Math.abs(this.wheelDelta.deltaY) < MIN_WHEEL_DELTA_Y)) {
-        console.log('Clear timeout & reinitialize');
-        clearTimeout(callback);
-        this.reinitializeWheelDelta();
-        return false;
-      }
-
-      console.group('GridItem: onWheel()', this.$root.scrollAllowed, event.deltaX, event.deltaY);
-      console.log(event);
+      console.group(`GridItem: onWheel >${direction}<`, event.deltaX, event.deltaY);
+      // console.log(event);
 
       if (event.deltaX !== 0) {
         this.$emit('moveColumnByX', event);
-      } else {
-        this.$emit('moveRowByY', event);
+      } else if (event.deltaY !== 0) {
+        this.moveRowByY(event);
       }
 
-      clearTimeout(callback);
-      this.reinitializeWheelDelta();
       console.groupEnd();
+
+      return true;
+    },
+    preventMove(direction) {
+      console.group('preventMove:', direction, this.preventDuration[direction]);
+      clearTimeout(this.preventMoveCallback[direction]);
+      if (this.preventDuration[direction] == null) {
+        this.preventDuration[direction] = 0;
+      } else if (this.preventDuration[direction] > 1000) {
+        console.log('duration > 1000 => allow move');
+        this.preventDuration[direction] = 0;
+        return false;
+      }
+      console.log('prevent scrolling');
+      this.$root.scrollAllowed = false;
+      this.preventDuration[direction] += 400;
+      this.preventMoveCallback[direction] = setTimeout(() => {
+        console.log('preventMove: reset preventMoveCallback');
+        this.preventMoveCallback[direction] = null;
+        this.preventDuration[direction] = 0;
+      }, 400);
+      setTimeout(() => {
+        console.log('preventMove: allow scrolling');
+        this.$root.scrollAllowed = true;
+      }, 300);
+      console.groupEnd();
+      return true;
+    },
+    moveRowByY(event) {
+      if (event.deltaY === 0) return false;
+
+      const el = this.$refs.gridItem;
+      const isTop = el.scrollTop === 0;
+      const isBottom = Math.abs((el.scrollHeight - el.scrollTop) - el.clientHeight) <= 1;
+
+      if (this.isTop !== isTop || (this.preventMoveCallback.up && event.deltaY < 0)) {
+        this.isTop = isTop;
+        if (isTop && this.preventMove('up')) return true;
+      }
+      if (this.isBottom !== isBottom || (this.preventMoveCallback.down && event.deltaY > 0)) {
+        this.isBottom = isBottom;
+        if (isBottom && this.preventMove('down')) return true;
+      }
+
+      if (isTop && event.deltaY < 0) {
+        this.$emit('moveRow', 'up');
+      } else if (isBottom && event.deltaY > 0) {
+        this.$emit('moveRow', 'down');
+      }
 
       return true;
     },
