@@ -51,6 +51,9 @@ export default {
     column: { type: Object, required: true },
   },
   methods: {
+    onRename(name) {
+      this.column.name = name;
+    },
     onBoxDropped() {},
     addBox(columnId) {
       const path = 'http://localhost:5001/boxes';

@@ -5,6 +5,7 @@
         v-model="box.name"
         :itemId="box.id"
         :itemType="'box'"
+        @rename="onRename"
       ></editable-title>
       <div
         class="remove-button"
@@ -106,6 +107,9 @@ export default {
       if (event.detail > 1) return;
       this.boxReduced = !this.boxReduced;
       this.$el.classList.toggle('box-reduced');
+    },
+    onRename(name) {
+      this.box.name = name;
     },
     onRemoveBox() {
       // eslint-disable-next-line

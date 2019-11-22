@@ -21,6 +21,8 @@
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
   model: {
     prop: 'title',
@@ -47,16 +49,26 @@ export default {
       });
     },
     updateTitle() {
-      // const parameters = {
-      //  id: this.itemId,
-      //  title: this.title,
-      //  type: this.itemType
-      // };
+      const params = {
+        name: this.title,
+      };
 
-      // $.get('/rename', parameters, (data, status) => {
+      const type = (this.itemType === 'box') ? 'boxes' : `${this.itemType}s`;
+
+      const url = `http://localhost:5001/${type}/${this.itemId}`;
+
+      console.log('params:', params);
+      console.log('url:', url);
+
+      axios.patch(url, { params })
+        .then((res) => {
+          console.log(res.data);
+          this.$emit('rename', res.data.name);
+          this.oldTitle = this.title;
+        })
+        .catch(error => console.error(error));
+
       this.isInputVisible = false;
-      //  this.oldTitle = this.title;
-      // });
     },
     cancel() {
       this.$emit('input', this.oldTitle);
