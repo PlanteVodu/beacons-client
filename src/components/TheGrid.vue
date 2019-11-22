@@ -69,30 +69,33 @@ export default {
     scrollTo(element, onDone) {
       console.log('scrollTo:', element);
 
-      // if (this.cancelScroll != null) {
-      //   console.log('cancelScroll!');
-      //   this.cancelScroll();
-      //   this.cancelScroll = null;
-      //   const destinationId = this.getGridItemId(this.currentColumn,
-      //     this.currentRows[this.currentColumn - 1]);
-      //   const destination = document.getElementById(destinationId);
-      //   destination.scrollIntoView();
+    scrollTo(destinationId, onDone) {
+      console.log('scrollTo:', destinationId);
+      console.log('this.cancelScroll:', this.cancelScroll);
 
-      // }
+      const destination = document.getElementById(destinationId);
+
+      if (this.cancelScroll != null) {
+        if (destination === this.destination) {
+          console.log('same destination!');
+          return;
+        }
+        console.log('cancelScroll()');
+        this.cancelScroll();
+      }
+
+      this.destination = destination;
 
       const duration = WHEEL_TIMEOUT_DURATION;
 
       const options = {
-        // container: '#content',
         easing: 'ease-in-out',
         force: true,
         // cancelable: false,
         onStart: () => {
-          // scrolling started
           console.log('start scrolling');
         },
         onDone: () => {
-          // scrolling is done
           console.log('scrolling done');
           this.cancelScroll = null;
           onDone();
@@ -101,32 +104,29 @@ export default {
           console.log('onCancel!');
           console.log('ev:', ev);
           // console.log('el:', el);
-          if (ev.type === 'DOMMouseScroll' || ev.type === 'wheel') {
-            return false;
+          if (ev.type === 'DOMMouseScroll' || ev.type === 'wheel') return false;
+          if (ev.type === 'mousedown') {
+            // If we go to the tip, don't cancel
+            if (ev.explicitOriginalTarget.classList.contains('scroll-border-left')
+              && this.currentColumn === 1) return false;
+            if (ev.explicitOriginalTarget.classList.contains('scroll-border-right')
+              && this.currentColumn === 5) return false;
           }
-          // Si on est déjà au bout (horizontal ou vertical, ne pas annuler)
           console.log('scrolling cancelled');
           this.scrollAllowed = true;
-          // const destinationId = this.getGridItemId(this.currentColumn,
-          //   this.currentRows[this.currentColumn - 1]);
-          // const destination = document.getElementById(destinationId);
-          // destination.scrollIntoView();
           this.cancelScroll = null;
+          // this.destination = null;
           return true;
-          // const destination = document.getElementById(element);
-          // destination.scrollIntoView();
-          // this.$scrollTo(element, duration, options);
-          // scrolling has been interrupted
         },
         x: true,
         y: true,
       };
 
-      // this.cancelScroll = VueScrollTo.scrollTo(element, duration, options);
+      // this.cancelScroll = VueScrollTo.scrollTo(destinationId, duration, options);
 
       // or alternatively inside your components you can use
       // this.cancelScroll =
-      this.cancelScroll = this.$scrollTo(`#${element}`, duration, options);
+      this.cancelScroll = this.$scrollTo(`#${destinationId}`, duration, options);
 
       // to cancel scrolling you can call the returned function
       // cancelScroll();
@@ -192,9 +192,6 @@ export default {
 
     moveColumn(direction) {
       console.group('TheGrid: moveColumn:', direction);
-      console.log('this.GridItems:', this.GridItems);
-      console.log('this.gridItems.key:', this.gridItems.key);
-      console.log('this:', this);
 
       const currentRow = this.currentRows[this.currentColumn - 1];
       const destinationColumn = this.currentColumn + (direction === 'left' ? -1 : 1);
