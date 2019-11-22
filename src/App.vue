@@ -23,7 +23,7 @@ export default {
   methods: {
     getBeacons() {
       const path = 'http://localhost:5001/beacons';
-      axios.get(path)
+      axios.get(path, { params: { transform: true } })
         .then((res) => { this.beacons = res.data; })
         .catch(error => console.error(error));
     },
