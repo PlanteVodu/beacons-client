@@ -63,7 +63,7 @@ export default {
     const el = this.$refs.gridItem;
     this.isTop = el.scrollTop === 0;
     this.isBottom = Math.abs((el.scrollHeight - el.scrollTop) - el.clientHeight) <= 1;
-    this.preventDuration = {};
+    this.movePreventedSince = {};
     this.preventMoveCallback = {};
   },
   methods: {
@@ -118,26 +118,27 @@ export default {
       return true;
     },
     preventMove(direction) {
-      console.group('preventMove:', direction, this.preventDuration[direction]);
       clearTimeout(this.preventMoveCallback[direction]);
-      if (this.preventDuration[direction] == null) {
-        this.preventDuration[direction] = 0;
-      } else if (this.preventDuration[direction] > 1000) {
-        console.log('duration > 1000 => allow move');
-        this.preventDuration[direction] = 0;
+
+      const preventedDuration = this.movePreventedSince[direction]
+        ? Date.now() - this.movePreventedSince[direction]
+        : 0;
+
+      console.group('preventMove:', direction, preventedDuration);
+
+      if (preventedDuration === 0) {
+        this.movePreventedSince[direction] = Date.now();
+      } else if (preventedDuration > 800) {
+        console.log('duration > 800 => allow move');
+        this.movePreventedSince[direction] = 0;
         return false;
       }
-      console.log('prevent scrolling');
-      this.$root.scrollAllowed = false;
-      this.preventDuration[direction] += 400;
+
+      console.log('prevent scrolling', direction);
       this.preventMoveCallback[direction] = setTimeout(() => {
-        console.log('preventMove: reset preventMoveCallback');
+        console.log('preventMove: reset', direction);
         this.preventMoveCallback[direction] = null;
-        this.preventDuration[direction] = 0;
-      }, 400);
-      setTimeout(() => {
-        console.log('preventMove: allow scrolling');
-        this.$root.scrollAllowed = true;
+        this.movePreventedSince[direction] = 0;
       }, 300);
       console.groupEnd();
       return true;
