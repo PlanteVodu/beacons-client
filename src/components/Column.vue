@@ -2,7 +2,7 @@
   <div class="column" :column-id="column.id">
     <div class="column-header">
       <editable-title
-        v-model="column.title"
+        v-model="column.name"
         :itemId="column.id"
         :itemType="'column'"
         @removeBox="removeBox"
@@ -15,12 +15,12 @@
       </div>
     </div>
     <draggable
-      :list="column.boxes"
+      :list="column.content"
       group="boxes"
       @change="onBoxDropped"
     >
       <box
-        v-for="box in column.boxes"
+        v-for="box in column.content"
         :key="'box-' + box.id"
         :box="box"
       ></box>

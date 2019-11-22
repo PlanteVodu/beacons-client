@@ -9,16 +9,16 @@
     <div class="banner"></div>
     <draggable
       class="content column-container"
-      :list="item.columns"
+      :list="item.content"
       handle=".column-header"
       group="columns"
     >
       <column
-        v-for="(column, index) in item.columns"
+        v-for="(column, index) in item.content"
         :key="'column-' + column.id"
         :column="column"
         :position="index"
-        :nbColumns="item.columns.length"
+        :nbColumns="item.content.length"
         @removeColumn="removeColumn"
       ></column>
       <!-- <div
@@ -73,13 +73,13 @@ export default {
 
       // $.get('addcolumn', parameters, (data, status) => {
       //   const column = JSON.parse(data);
-      //   this.item.columns.push(column);
+      //   this.item.content.push(column);
       // });
     },
     removeColumn(columnToRemove) {
-      const index = this.item.columns.indexOf(columnToRemove);
+      const index = this.item.content.indexOf(columnToRemove);
       if (index > -1) {
-        this.item.columns.splice(index, 1);
+        this.item.content.splice(index, 1);
       }
     },
     reinitializeWheelDelta() {

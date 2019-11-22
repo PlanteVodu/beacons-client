@@ -6,7 +6,7 @@
     target="_blank"
   >
     <img :src="bookmark.icon">
-    <div class="title"> {{ bookmark.title }} </div>
+    <div class="title"> {{ bookmark.name }} </div>
   </a>
 </template>
 

@@ -2,7 +2,7 @@
   <div class="box" ref="boX" :box-id="box.id">
     <div class="box-header" @click.self="toggle">
       <editable-title
-        v-model="box.title"
+        v-model="box.name"
         :itemId="box.id"
         :itemType="'box'"
       ></editable-title>
@@ -16,12 +16,12 @@
     <draggable
       class="box-bookmarks"
       ref="boxBookmarks"
-      :list="box.bookmarks"
+      :list="box.content"
       group="bookmark"
       @change="onBookmarkDropped"
     >
       <bookmark
-        v-for="bookmark in box.bookmarks"
+        v-for="bookmark in box.content"
         :key="'bookmark-' + bookmark.id"
         :bookmark="bookmark"
       ></bookmark>
@@ -80,7 +80,7 @@ export default {
   computed: {
     bookmarksMaxHeight() {
       console.log('computed!');
-      return `${26 * this.box.bookmarks.length}px`;
+      return `${26 * this.box.content.length}px`;
       // // if (!Object.prototype.hasOwnProperty.call(this.$refs, 'boX')) return 0;
       // return this.$refs.boX.$el.classList.contains('box-reduced') ? 0
       //   : ;
@@ -160,7 +160,7 @@ export default {
       //   const newBookmark = JSON.parse(data);
       //   console.log("newBookmark:", newBookmark);
       //   console.log("this.box:", this.box);
-      //   this.box.bookmarks.push(newBookmark);
+      //   this.box.content.push(newBookmark);
       //   this.$refs.newBookmarkInput.value = '';
       //   this.hideNewBookmark();
       // });
