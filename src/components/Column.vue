@@ -61,7 +61,7 @@ export default {
         };
 
         axios
-          .delete('http://localhost:5000/rmobj', { params: column })
+          .delete('http://localhost:5001/rmobj', { params: column })
           .then(() => {
             console.log('Success: Column has been removed from data base!');
             this.$emit('removeColumn', this.column);

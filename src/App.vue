@@ -22,15 +22,10 @@ export default {
   },
   methods: {
     getBeacons() {
-      const path = 'http://localhost:5000/beacons';
+      const path = 'http://localhost:5001/beacons';
       axios.get(path)
-        .then((res) => {
-          console.log('res.data:', res.data);
-          this.beacons = res.data;
-        })
-        .catch((error) => {
-          console.error(error);
-        });
+        .then((res) => { this.beacons = res.data; })
+        .catch(error => console.error(error));
     },
     getItemId(column, row) {
       return `#slide-${column}-row-${row}`;

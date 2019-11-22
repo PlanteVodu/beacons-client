@@ -116,7 +116,7 @@ export default {
         };
 
         axios
-          .delete('http://localhost:5000/rmobj', { params: box })
+          .delete('http://localhost:5001/rmobj', { params: box })
           .then(() => {
             console.log('Success: Box has been removed from data base!');
             this.$emit('removeBox', this.box);
