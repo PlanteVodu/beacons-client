@@ -130,15 +130,15 @@ $transitionDuration: 0.7s;
   height: 75px;
   border-radius: 6px;
   transition: opacity .7s, background-color .7s;
-}
 
-.column-container:hover .add-box {
-  opacity: 1;
-}
+  &:hover {
+    cursor: pointer;
+    background-color: #ffccfe36;
+  }
 
-.add-box:hover {
-  cursor: pointer;
-  background-color: #ffccfe36;
+  .column:hover & {
+    opacity: 1;
+  }
 }
 
 </style>
