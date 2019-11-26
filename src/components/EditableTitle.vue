@@ -49,18 +49,17 @@ export default {
       });
     },
     updateTitle() {
-      const params = {
-        name: this.title,
-      };
-
       const type = (this.itemType === 'box') ? 'boxes' : `${this.itemType}s`;
 
       const url = `http://localhost:5001/${type}/${this.itemId}`;
+      const data = {
+        name: this.title,
+      };
 
-      console.log('params:', params);
       console.log('url:', url);
+      console.log('data:', data);
 
-      axios.patch(url, { params })
+      axios.patch(url, data)
         .then((res) => {
           console.log(res.data);
           this.$emit('rename', res.data.name);
