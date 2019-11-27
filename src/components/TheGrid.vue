@@ -170,9 +170,10 @@ export default {
         }
 
         console.log('Scrolling!');
+        const column = this.currentColumn;
         const onDone = () => {
           if (currentRow !== destinationRow) {
-            this.switchBackItemsRows(this.current);
+            this.switchBackItemsRows(column, currentRow, destinationRow);
           }
           console.log('TheGrid: Reactivate wheel');
           this.$root.scrollAllowed = true;
@@ -226,6 +227,7 @@ export default {
       }
     },
     switchBackItemsRows(column, row1, row2) {
+      console.log('switchBackItemsRows:', column, row1, row2);
       const item1 = this.getGridItemId(column, row1);
       const item2 = this.getGridItemId(column, row2);
 
