@@ -163,19 +163,20 @@ export default {
       if (destination != null) {
         this.$root.scrollAllowed = false;
 
-        if (currentRow !== destinationRow) {
-          console.log('Different rows. Switching & silent moving');
-          this.switchItemsRows(this.currentColumn, currentRow, destinationRow);
-          this.silentMoveRow(currentRow);
+        if (currentRow !== 1) {
+          console.log('Not on first row. Switching with first row item.');
+          this.switchItemsRows(this.currentColumn, 1, currentRow);
         }
 
         console.log('Scrolling!');
-        const column = this.currentColumn;
         const onDone = () => {
-          if (currentRow !== destinationRow) {
-            this.switchBackItemsRows(column, currentRow, destinationRow);
-          }
           console.log('TheGrid: Reactivate wheel');
+          const newCurrentRow = this.currentRows[this.currentColumn - 1];
+          if (newCurrentRow !== 1) {
+            console.log('Switching back with first row item.');
+            // Note that values inside 'this' have changed when the callback is called
+            this.switchBackItemsRows(this.currentColumn, 1, newCurrentRow);
+          }
           this.$root.scrollAllowed = true;
         };
         this.currentColumn = destinationColumn;
