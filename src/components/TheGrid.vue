@@ -68,7 +68,7 @@ export default {
 
     scrollTo(destinationId, onDone) {
       console.log('scrollTo:', destinationId);
-      console.log('this.cancelScroll:', this.cancelScroll);
+      if (this.cancelScroll) console.log('this.cancelScroll:', this.cancelScroll);
 
       const destination = document.getElementById(destinationId);
 
@@ -154,9 +154,9 @@ export default {
       const currentRow = this.currentRows[this.currentColumn - 1];
       const destinationColumn = this.currentColumn + (direction === 'left' ? -1 : 1);
       const destinationRow = this.currentRows[destinationColumn - 1];
+
       const destinationId = this.getGridItemId(destinationColumn, destinationRow);
       console.log("destination's coordinates:", destinationRow, destinationColumn);
-
       const destination = document.getElementById(destinationId);
       console.log('destination:', destination);
 
@@ -179,6 +179,7 @@ export default {
           }
           this.$root.scrollAllowed = true;
         };
+
         this.currentColumn = destinationColumn;
         this.scrollTo(destinationId, onDone);
       }
