@@ -66,7 +66,7 @@ export default {
       console.log('this.currentRows:', this.currentRows);
     },
 
-    scrollTo(destinationId, onDone) {
+    scrollTo(destinationId, onDone, onEnding) {
       console.log('scrollTo:', destinationId);
       console.log('this.cancelScroll:', this.cancelScroll);
 
@@ -96,6 +96,7 @@ export default {
           console.log('scrolling done');
           this.cancelScroll = null;
           onDone();
+          if (onEnding != null) onEnding();
         },
         onCancel: (ev) => {
           // console.log('onCancel!');
@@ -110,6 +111,7 @@ export default {
               && this.currentColumn === 5) return false;
           }
           console.log('scrolling cancelled');
+          if (onEnding != null) onEnding();
           this.scrollAllowed = true;
           this.cancelScroll = null;
           // this.destination = null;
@@ -172,14 +174,17 @@ export default {
         console.log('Scrolling!');
         const column = this.currentColumn;
         const onDone = () => {
-          if (currentRow !== destinationRow) {
-            this.switchBackItemsRows(column, currentRow, destinationRow);
-          }
           console.log('TheGrid: Reactivate wheel');
           this.$root.scrollAllowed = true;
         };
+        const onEnding = () => {
+          if (currentRow !== destinationRow) {
+            this.switchBackItemsRows(column, currentRow, destinationRow);
+          }
+        };
+
         this.currentColumn = destinationColumn;
-        this.scrollTo(destinationId, onDone);
+        this.scrollTo(destinationId, onDone, onEnding);
       }
 
       console.groupEnd();
