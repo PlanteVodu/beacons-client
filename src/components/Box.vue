@@ -19,7 +19,8 @@
       ref="boxBookmarks"
       :list="box.content"
       group="bookmark"
-      @change="onBookmarkDropped"
+      @update="onBookmarkMoved"
+      @add="onBookmarkAdded"
     >
       <bookmark
         v-for="bookmark in box.content"
@@ -162,34 +163,24 @@ export default {
       //   this.hideNewBookmark();
       // });
     },
-    onBookmarkDropped(event) {
-      console.log(event);
-      if (Object.prototype.hasOwnProperty.call(event, 'moved')) {
-        console.log('Move!!');
-        console.log('event.moved.newIndex:', event.moved.newIndex);
+    onBookmarkMoved(event) {
+      const bookmarkId = event.item.attributes['bookmark-id'].value;
+      const path = `http://localhost:5001/bookmarks/${bookmarkId}`;
+      const data = { position: event.newIndex };
 
-        // const parameters = {
-        //   bookmarkId: event.moved.element.id,
-        //   newOrder: event.moved.newIndex,
-        // };
+      return axios.patch(path, data)
+        .catch((error) => { console.error(error); return false; });
+    },
+    onBookmarkAdded(event) {
+      const bookmarkId = event.item.attributes['bookmark-id'].value;
+      const path = `http://localhost:5001/bookmarks/${bookmarkId}`;
+      const data = {
+        position: event.newIndex,
+        parent_id: this.box.id,
+      };
 
-        // $.get('/movebm', parameters, () => {
-        //   console.log('Moved!!');
-        // });
-      } else if (Object.prototype.hasOwnProperty.call(event, 'added')) {
-        console.log('Add in', this.box.id);
-        console.log('event.added.element.id:', event.added.element.id);
-
-        // const parameters = {
-        //   bookmark_id: event.added.element.id,
-        //   box_id: this.box.id,
-        //   order: event.added.newIndex,
-        // };
-
-        // $.get('/movebmbox', parameters, () => {
-        //   console.log('Added!!');
-        // });
-      }
+      return axios.patch(path, data)
+        .catch((error) => { console.error(error); return false; });
     },
   },
 };
