@@ -13,6 +13,8 @@
       :list="item.content"
       handle=".column-header"
       group="columns"
+      @update="onColumnMoved"
+      @add="onColumnAdded"
     >
       <column
         v-for="(column, index) in item.content"
@@ -78,6 +80,25 @@ export default {
       axios.post(path, params)
         .then((res) => { this.item.content.push(res.data); })
         .catch(error => console.error(error));
+    },
+    onColumnMoved(event) {
+      const columnId = event.item.attributes['column-id'].value;
+      const path = `http://localhost:5001/columns/${columnId}`;
+      const data = { position: event.newIndex };
+
+      return axios.patch(path, data)
+        .catch((error) => { console.error(error); return false; });
+    },
+    onColumnAdded(event) {
+      const columnId = event.item.attributes['column-id'].value;
+      const path = `http://localhost:5001/columns/${columnId}`;
+      const data = {
+        position: event.newIndex,
+        parent_id: this.item.id,
+      };
+
+      return axios.patch(path, data)
+        .catch((error) => { console.error(error); return false; });
     },
     removeColumn(columnToRemove) {
       const index = this.item.content.indexOf(columnToRemove);
