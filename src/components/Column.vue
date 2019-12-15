@@ -18,7 +18,8 @@
     <draggable
       :list="column.content"
       group="boxes"
-      @change="onBoxDropped"
+      @update="onBoxMoved"
+      @add="onBoxAdded"
     >
       <box
         v-for="box in column.content"
@@ -54,7 +55,25 @@ export default {
     onRename(name) {
       this.column.name = name;
     },
-    onBoxDropped() {},
+    onBoxMoved(event) {
+      const boxId = event.item.attributes['box-id'].value;
+      const path = `http://localhost:5001/boxes/${boxId}`;
+      const data = { position: event.newIndex };
+
+      return axios.patch(path, data)
+        .catch((error) => { console.error(error); return false; });
+    },
+    onBoxAdded(event) {
+      const boxId = event.item.attributes['box-id'].value;
+      const path = `http://localhost:5001/boxes/${boxId}`;
+      const data = {
+        position: event.newIndex,
+        parent_id: this.column.id,
+      };
+
+      return axios.patch(path, data)
+        .catch((error) => { console.error(error); return false; });
+    },
     addBox(columnId) {
       const path = 'http://localhost:5001/boxes';
       console.log('columnId:', columnId);
