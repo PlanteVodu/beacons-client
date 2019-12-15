@@ -240,20 +240,12 @@ $borderRadius: 3px;
   transition: color $transitionDuration ease;
   cursor: pointer;
   position: relative;
-
-  &:hover {
-    color: #fff !important;
-  }
 }
 
 .box-title {
   display: inline-block;
   cursor: text;
   transition: color $transitionDuration;
-
-  // &:hover {
-  //   color: #fff;
-  // }
 }
 
 /* NEW BOOKMARK ICON */
