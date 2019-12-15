@@ -7,11 +7,13 @@
         :itemType="'box'"
         @rename="onRename"
       ></editable-title>
-      <div
-        class="remove-button"
-        title="Remove this box"
-        @click="onRemoveBox"
-      >&times;</div>
+      <div class="container-actions">
+        <div
+          class="action remove-button"
+          title="Remove this box"
+          @click="onRemoveBox"
+        >&times;</div>
+      </div>
     </div>
       <!-- :style="{maxHeight: bookmarksMaxHeight}" -->
     <draggable

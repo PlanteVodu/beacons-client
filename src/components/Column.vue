@@ -8,11 +8,19 @@
         @removeBox="removeBox"
         @rename="onRename"
       ></editable-title>
-      <div
-        class="remove-button"
-        title="Remove this column"
-        @click="onRemoveColumn"
-      >&times;
+      <div class="container-actions">
+        <div
+          class="action add-button"
+          title="Add a new box"
+          @click="addBox(column.id)"
+        >+
+        </div>
+        <div
+          class="action remove-button"
+          title="Remove this column"
+          @click="onRemoveColumn"
+        >&times;
+        </div>
       </div>
     </div>
     <draggable
@@ -27,11 +35,6 @@
         :box="box"
       ></box>
     </draggable>
-    <div
-      class="add-box"
-      @click="addBox(column.id)"
-      title="Add a new box"
-    >+</div>
   </div>
 </template>
 
@@ -166,25 +169,43 @@ $transitionDuration: 0.7s;
 
 $transitionDuration: 0.7s;
 
-.remove-button {
+.container-actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  align-content: flex-start;
   position: absolute;
   top: 0;
   right: 0;
   font-size: 1.3rem;
-  color: hsla(0, 70%, 45%, 1);
-  text-shadow: 0px 0px 3px black;
-  font-weight: bold;
-  cursor: pointer;
-  margin-right: -20px;
-  transition: margin-right $transitionDuration, color $transitionDuration;
+  margin-right: -40px;
+  transition: margin-right $transitionDuration;
+
+  & .action {
+    cursor: pointer;
+    margin-left: 3px;
+    transition: color $transitionDuration;
+    color: #fff7;
+
+    &:hover {
+      color: #fffd;
+    }
+  }
 
   .column-header:hover &,
   .box-header:hover & {
     margin-right: 10px;
   }
 
-  &:hover {
-    color:hsla(0, 100%, 55%, 1);
+  & > .add-button {
+    text-shadow: 0px 0px 3px black;
+    font-weight: bold;
+    font-size: 1.2rem;
+  }
+
+  .remove-button {
+    text-shadow: 0px 0px 3px black;
+    font-weight: bold;
   }
 }
 
