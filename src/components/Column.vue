@@ -33,6 +33,7 @@
         v-for="box in column.content"
         :key="'box-' + box.id"
         :box="box"
+        @removeBox="removeBox"
       ></box>
     </draggable>
   </div>
@@ -109,9 +110,9 @@ export default {
       }
     },
     removeBox(boxToRemove) {
-      const index = this.item.boxes.indexOf(boxToRemove);
+      const index = this.column.content.indexOf(boxToRemove);
       if (index > -1) {
-        this.item.boxes.splice(index, 1);
+        this.column.content.splice(index, 1);
       }
     },
   },
