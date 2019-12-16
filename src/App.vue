@@ -16,6 +16,7 @@ export default {
   data() {
     return {
       beacons: [],
+      beaconsLastModification: 0,
       nbColumns: 0,
       nbRows: 0,
     };
@@ -27,15 +28,27 @@ export default {
         .then((res) => { this.beacons = res.data; })
         .catch(error => console.error(error));
     },
+    refreshBeacons() {
+      axios.get('http://localhost:5001/beacons/lastmodification')
+        .then((res) => {
+          if (res.data > this.beaconsLastModification) {
+            console.log('Refreshing beacons');
+            this.getBeacons();
+            this.beaconsLastModification = res.data;
+          }
+        })
+        .catch(error => console.error(error));
+    },
     getItemId(column, row) {
       return `#slide-${column}-row-${row}`;
     },
   },
   created() {
-    this.getBeacons();
+    this.refreshBeacons();
   },
   mounted() {
     window.scrollTo(0, 0);
+    document.addEventListener('focus', this.refreshBeacons);
   },
 };
 </script>
